@@ -11,7 +11,7 @@
 bool running = 1;
 enum directions { NORTH, EAST, SOUTH, WEST, TOP_RIGHT_CORNER, TOP_LEFT_CORNER, BOTTEM_RIGHT_CORNER, BOTTEM_LEFT_CORNER };
 enum gameStates { ASDF, GAME_TICK, DRAW };
-enum snakeColors {GREEN, BLUE, RED};
+enum snakeColors { GREEN, BLUE, RED };
 
 //These strings are the file names for the different possible snakeParts textures
 std::string greenHeadString   = "greenHead.png";
@@ -37,7 +37,7 @@ SDL_Event e;
 int snakeID = 0;
 int windowHeight = 800;
 int windowWidth = 500;
-int const SNAKEPART_SIZE = 25;
+int SNAKEPART_SIZE = 25;
 
 //These are the number ranges that use the rng, used for the spawning x position of the snake, the length of the snake, and the color of the snake
 std::uniform_real_distribution <double> startingXRange(0, windowWidth / SNAKEPART_SIZE);
@@ -48,7 +48,7 @@ std::default_random_engine rng(std::chrono::system_clock::now().time_since_epoch
 // loadTexture() takes the filename and renderer and loads the image to a texture
 SDL_Texture *loadTexture(const std::string &file, SDL_Renderer *ren) {
     SDL_Texture *texture = IMG_LoadTexture(renderer, file.c_str());
-    if(texture == nullptr) std::cout << "ERROR" << std::endl;
+    if(texture == nullptr) std::cout << "ERROR: texture == null" << std::endl;
     return texture;
 }
 
@@ -102,7 +102,6 @@ struct SnakePart {
 };
 
 SnakePart::SnakePart() {
-    std::cout << "Constructor call" << std::endl;
     sRect.h = SNAKEPART_SIZE;
     sRect.w = SNAKEPART_SIZE;
     sRect.x = 0;
@@ -133,16 +132,12 @@ void SnakePart::render() {
     }
     if (corner == BOTTEM_LEFT_CORNER) {
          SDL_RenderCopy(renderer, cornerTexture, NULL, &sRect);
-         std::cout << "bottem left\n";
     } else if (corner == BOTTEM_RIGHT_CORNER) {
         SDL_RenderCopyEx(renderer, cornerTexture, NULL, &sRect, 270, NULL, SDL_FLIP_NONE);
-        std::cout << "bottem right\n";
     } else if (corner == TOP_LEFT_CORNER) {
         SDL_RenderCopyEx(renderer, cornerTexture, NULL, &sRect, 90, NULL, SDL_FLIP_NONE);
-        std::cout << "top left\n";
     } else if (corner == TOP_RIGHT_CORNER) {
         SDL_RenderCopyEx(renderer, cornerTexture, NULL, &sRect, 180, NULL, SDL_FLIP_NONE);
-        std::cout << "top right\n";
     } else {
         if (direction == NORTH) {
             SDL_RenderCopyEx(renderer, tex, NULL, &sRect, 90, NULL, SDL_FLIP_NONE);
@@ -205,7 +200,6 @@ struct Snake {
     void move();
     bool collisionSnakeCheck();
 };
-
 
 // createSnakeParts constructs a SnakePart and sets the color, colorStrings, and sets the isHead, isBody, isTail booleans. Pushes the created SnakePart to the snakeVecMember vector;
 void Snake::createSnakeParts(int length, int color) {
@@ -295,7 +289,7 @@ void Snake::texSnakeParts() {
     } else std::cout << "failed to texture snake" << std::endl;
 }
 
-// orient() sets the updated SnakePart::direction, gets called at the end of the Snake::move() function;
+// orient() sets SnakePart::direction, gets called at the end of the Snake::move() function;
 // the new direction is based on the current SnakeParts direction and the direction of the snakePart in front of it.
 // so if the snakepart2 is facing south and snakepart1 is facing west, the Snake::corner will be set to BOTTEM_LEFT_CORNER
 void Snake::orient() {
@@ -427,7 +421,7 @@ bool Snake::collisionSnakeCheck() {
     checkSouthRect.x = snakeVecMember.at(0).sRect.x + 0;
     checkSouthRect.y = snakeVecMember.at(0).sRect.y + SNAKEPART_SIZE;
 
-    //If there was a collision last tick, and it moved and there
+    //If there was a collision last tick, and it killed the snake so now there is no collision, move to the south OR if there was a collision last tick and there is another collision this tick and the snake dies then move to the south 
     if (wantsSouth == true && !collisionCheck(&checkSouthRect) && checkRect.y < windowHeight - SNAKEPART_SIZE || wantsSouth == true && collisionCheck(&checkSouthRect, *this, &snakeKilled) && snakeKilled == true && checkRect.y < windowHeight - SNAKEPART_SIZE) {
         vel.x = 0;
         vel.y = SNAKEPART_SIZE;
@@ -491,26 +485,27 @@ int main(int argc, char* argv[]) {
                 running = 0;
                 break;
             } else if (e.type == SDL_KEYDOWN) {
-                if (e.key.keysym.sym == SDLK_UP) {
-                    if (!snakeMasterVec.empty()) {
+                if (!snakeMasterVec.empty()) {
+                    if (e.key.keysym.sym == SDLK_UP) {
                         snakeMasterVec.erase(snakeMasterVec.begin());
-                    } else {
-                        snakeMasterVec.push_back(Snake());
+                    } else if (e.key.keysym.sym == SDLK_LEFT) {
+                        snakeMasterVec.back().vel.x = -SNAKEPART_SIZE;
+                        snakeMasterVec.back().vel.y =  0;
+                        snakeMasterVec.back().direction = WEST;
+                    } else if (e.key.keysym.sym == SDLK_DOWN) {
+                        snakeMasterVec.back().vel.x = 0;
+                        snakeMasterVec.back().vel.y = SNAKEPART_SIZE;
+                        snakeMasterVec.back().direction = SOUTH;
+                    } else if (e.key.keysym.sym == SDLK_RIGHT) {
+                        snakeMasterVec.back().vel.x = SNAKEPART_SIZE;
+                        snakeMasterVec.back().vel.y = 0;
+                        snakeMasterVec.back().direction = EAST;
+                    } else if (e.key.keysym.sym == SDLK_DELETE){
+                        snakeMasterVec.erase(snakeMasterVec.begin());
                     }
-                } else if (e.key.keysym.sym == SDLK_LEFT) {
-                    snakeMasterVec.back().vel.x = -SNAKEPART_SIZE;
-                    snakeMasterVec.back().vel.y =  0;
-                    snakeMasterVec.back().direction = WEST;
-                } else if (e.key.keysym.sym == SDLK_DOWN) {
-                    snakeMasterVec.back().vel.x = 0;
-                    snakeMasterVec.back().vel.y = SNAKEPART_SIZE;
-                    snakeMasterVec.back().direction = SOUTH;
-                } else if (e.key.keysym.sym == SDLK_RIGHT) {
-                    snakeMasterVec.back().vel.x = SNAKEPART_SIZE;
-                    snakeMasterVec.back().vel.y = 0;
-                    snakeMasterVec.back().direction = EAST;
-                } else if (e.key.keysym.sym == SDLK_SPACE) {
-                    tickCallBack(1000, NULL);
+                }
+                if (e.key.keysym.sym == SDLK_RETURN) {
+                    snakeMasterVec.push_back(Snake());
                 }
             } else if (e.type = SDL_USEREVENT) {
                 if (e.user.code == GAME_TICK) {

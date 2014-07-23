@@ -1,18 +1,18 @@
-﻿Build started 7/22/2014 9:13:16 PM.
-     1>Project "C:\Users\Caleb\Documents\Visual Studio 2012\Projects\p3\p3.vcxproj" on node 2 (Build target(s)).
+﻿Build started 7/22/2014 9:58:55 PM.
+     1>Project "C:\Users\Caleb\Documents\GitHub\savageSnakes\p3.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
          C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\CL.exe /c /I"C:\Projects\SDL\SDL2-2.0.1\include" /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc110.pdb" /Gd /TP /analyze- /errorReport:prompt savageSnakes.cpp
          savageSnakes.cpp
-     1>c:\users\caleb\documents\visual studio 2012\projects\p3\savagesnakes.cpp(46): warning C4244: 'argument' : conversion from 'std::chrono::system_clock::rep' to 'unsigned int', possible loss of data
-     1>c:\users\caleb\documents\visual studio 2012\projects\p3\savagesnakes.cpp(178): warning C4244: '=' : conversion from 'double' to 'int', possible loss of data
-     1>c:\users\caleb\documents\visual studio 2012\projects\p3\savagesnakes.cpp(182): warning C4244: '=' : conversion from 'double' to 'int', possible loss of data
-     1>c:\users\caleb\documents\visual studio 2012\projects\p3\savagesnakes.cpp(191): warning C4018: '<' : signed/unsigned mismatch
-     1>c:\users\caleb\documents\visual studio 2012\projects\p3\savagesnakes.cpp(359): warning C4018: '<' : signed/unsigned mismatch
+     1>c:\users\caleb\documents\github\savagesnakes\savagesnakes.cpp(46): warning C4244: 'argument' : conversion from 'std::chrono::system_clock::rep' to 'unsigned int', possible loss of data
+     1>c:\users\caleb\documents\github\savagesnakes\savagesnakes.cpp(173): warning C4244: '=' : conversion from 'double' to 'int', possible loss of data
+     1>c:\users\caleb\documents\github\savagesnakes\savagesnakes.cpp(177): warning C4244: '=' : conversion from 'double' to 'int', possible loss of data
+     1>c:\users\caleb\documents\github\savagesnakes\savagesnakes.cpp(186): warning C4018: '<' : signed/unsigned mismatch
+     1>c:\users\caleb\documents\github\savagesnakes\savagesnakes.cpp(353): warning C4018: '<' : signed/unsigned mismatch
        Link:
-         C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\Caleb\Documents\Visual Studio 2012\Projects\p3\Debug\p3.exe" /INCREMENTAL /NOLOGO /LIBPATH:"C:\Projects\SDL\SDL2-2.0.1\lib" SDL2.lib SDL2_image.lib SDL2main.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Users\Caleb\Documents\Visual Studio 2012\Projects\p3\Debug\p3.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\Caleb\Documents\Visual Studio 2012\Projects\p3\Debug\p3.lib" /MACHINE:X86 Debug\savageSnakes.obj
-         p3.vcxproj -> C:\Users\Caleb\Documents\Visual Studio 2012\Projects\p3\Debug\p3.exe
-     1>Done Building Project "C:\Users\Caleb\Documents\Visual Studio 2012\Projects\p3\p3.vcxproj" (Build target(s)).
+         C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\Caleb\Documents\GitHub\savageSnakes\Debug\p3.exe" /INCREMENTAL /NOLOGO /LIBPATH:"C:\Projects\SDL\SDL2-2.0.1\lib" SDL2.lib SDL2_image.lib SDL2main.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Users\Caleb\Documents\GitHub\savageSnakes\Debug\p3.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\Caleb\Documents\GitHub\savageSnakes\Debug\p3.lib" /MACHINE:X86 Debug\savageSnakes.obj
+         p3.vcxproj -> C:\Users\Caleb\Documents\GitHub\savageSnakes\Debug\p3.exe
+     1>Done Building Project "C:\Users\Caleb\Documents\GitHub\savageSnakes\p3.vcxproj" (Build target(s)).
 
 Build succeeded.
 
-Time Elapsed 00:00:00.96
+Time Elapsed 00:00:01.00
