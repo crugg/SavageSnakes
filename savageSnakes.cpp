@@ -37,9 +37,10 @@ SDL_Event e;
 int snakeID = 0;
 int windowHeight = 800;
 int windowWidth = 500;
+int const SNAKEPART_SIZE = 25;
 
 //These are the number ranges that use the rng, used for the spawning x position of the snake, the length of the snake, and the color of the snake
-std::uniform_real_distribution <double> startingXRange(0, windowWidth / 50);
+std::uniform_real_distribution <double> startingXRange(0, windowWidth / SNAKEPART_SIZE);
 std::uniform_real_distribution <double> lengthRange(3, 10);
 std::uniform_real_distribution <double> colorRange(0, 3);
 std::default_random_engine rng(std::chrono::system_clock::now().time_since_epoch().count());
@@ -102,8 +103,8 @@ struct SnakePart {
 
 SnakePart::SnakePart() {
     std::cout << "Constructor call" << std::endl;
-    sRect.h = 50;
-    sRect.w = 50;
+    sRect.h = SNAKEPART_SIZE;
+    sRect.w = SNAKEPART_SIZE;
     sRect.x = 0;
     sRect.y = 0;
 
@@ -177,7 +178,7 @@ struct Snake {
         length = lengthRange(rng);
         dieNextTick = false;
         vel.x = 0;
-        vel.y = 50;
+        vel.y = SNAKEPART_SIZE;
         color = colorRange(rng);
         createSnakeParts(length, color);
         texSnakeParts();
@@ -262,9 +263,9 @@ void Snake::render() {
 void Snake::arrangeSnakeParts() {
     int y = 0;
     for (auto it = snakeVecMember.begin(); it != snakeVecMember.end(); ++it) {
-        it->sRect.x = 50 * (int)startingXRange(rng);
+        it->sRect.x = SNAKEPART_SIZE * (int)startingXRange(rng);
         it->sRect.y = y;
-        y -= 50;
+        y -= SNAKEPART_SIZE;
     }
 }
 
@@ -402,57 +403,57 @@ bool collisionCheck(SDL_Rect* rectCheck, Snake snake, bool * didSnakeDie) {
 bool Snake::collisionSnakeCheck() {
     bool snakeKilled = false;
     SDL_Rect checkRect;
-    checkRect.h = 50;
-    checkRect.w = 50;
+    checkRect.h = SNAKEPART_SIZE;
+    checkRect.w = SNAKEPART_SIZE;
     SDL_Rect checkEastRect;
-    checkEastRect.h = 50;
-    checkEastRect.w = 50;
+    checkEastRect.h = SNAKEPART_SIZE;
+    checkEastRect.w = SNAKEPART_SIZE;
     SDL_Rect checkWestRect;
-    checkWestRect.h = 50;
-    checkWestRect.w = 50;
+    checkWestRect.h = SNAKEPART_SIZE;
+    checkWestRect.w = SNAKEPART_SIZE;
     SDL_Rect checkSouthRect;
-    checkSouthRect.h = 50;
-    checkSouthRect.w = 50;
+    checkSouthRect.h = SNAKEPART_SIZE;
+    checkSouthRect.w = SNAKEPART_SIZE;
    
     checkRect.x = snakeVecMember.at(0).sRect.x + vel.x;
     checkRect.y = snakeVecMember.at(0).sRect.y + vel.y;
 
-    checkEastRect.x = snakeVecMember.at(0).sRect.x + 50;
+    checkEastRect.x = snakeVecMember.at(0).sRect.x + SNAKEPART_SIZE;
     checkEastRect.y = snakeVecMember.at(0).sRect.y + 0;
 
-    checkWestRect.x = snakeVecMember.at(0).sRect.x - 50;
+    checkWestRect.x = snakeVecMember.at(0).sRect.x - SNAKEPART_SIZE;
     checkWestRect.y = snakeVecMember.at(0).sRect.y + 0;
 
     checkSouthRect.x = snakeVecMember.at(0).sRect.x + 0;
-    checkSouthRect.y = snakeVecMember.at(0).sRect.y + 50;
+    checkSouthRect.y = snakeVecMember.at(0).sRect.y + SNAKEPART_SIZE;
 
     //If there was a collision last tick, and it moved and there
-    if (wantsSouth == true && !collisionCheck(&checkSouthRect) && checkRect.y < windowHeight - 50 || wantsSouth == true && collisionCheck(&checkSouthRect, *this, &snakeKilled) && snakeKilled == true && checkRect.y < windowHeight - 50) {
+    if (wantsSouth == true && !collisionCheck(&checkSouthRect) && checkRect.y < windowHeight - SNAKEPART_SIZE || wantsSouth == true && collisionCheck(&checkSouthRect, *this, &snakeKilled) && snakeKilled == true && checkRect.y < windowHeight - SNAKEPART_SIZE) {
         vel.x = 0;
-        vel.y = 50;
+        vel.y = SNAKEPART_SIZE;
         direction = SOUTH;
         wantsSouth = false;
     }
 
     // Is there a collision?
-    if (collisionCheck(&checkRect, *this, &snakeKilled) || checkRect.x < 0 || checkRect.x > windowWidth - 50 || checkRect.y > windowHeight - 50) {
+    if (collisionCheck(&checkRect, *this, &snakeKilled) || checkRect.x < 0 || checkRect.x > windowWidth - SNAKEPART_SIZE || checkRect.y > windowHeight - SNAKEPART_SIZE) {
         if (snakeKilled) {
             return false;
         } 
             //Is there space to the South?
-            if (!collisionCheck(&checkSouthRect) && checkRect.y < windowHeight - 50) {
+            if (!collisionCheck(&checkSouthRect) && checkRect.y < windowHeight - SNAKEPART_SIZE) {
                 vel.x = 0;
-                vel.y = 50;
+                vel.y = SNAKEPART_SIZE;
                 direction = SOUTH;
                 //Is there space to the West?
             } else if (!collisionCheck(&checkWestRect) && checkRect.x > 0 || collisionCheck(&checkWestRect, *this, &snakeKilled) && snakeKilled == true && checkRect.x > 0) {
-                vel.x = -50;
+                vel.x = -SNAKEPART_SIZE;
                 vel.y = 0;
                 direction = WEST;
                 wantsSouth = true;
                 //Is there space to the East?
-            } else if (!collisionCheck(&checkEastRect) && checkRect.x < windowWidth - 50 || collisionCheck(&checkEastRect, *this, &snakeKilled) && snakeKilled == true && checkRect.x < windowWidth - 50) {
-                vel.x = 50;
+            } else if (!collisionCheck(&checkEastRect) && checkRect.x < windowWidth - SNAKEPART_SIZE || collisionCheck(&checkEastRect, *this, &snakeKilled) && snakeKilled == true && checkRect.x < windowWidth - SNAKEPART_SIZE) {
+                vel.x = SNAKEPART_SIZE;
                 vel.y = 0;
                 direction = EAST;
                 wantsSouth = true;
@@ -476,13 +477,13 @@ int main(int argc, char* argv[]) {
     int const TICKDELAY = 100;
     bool addSnake = false;
     SDL_Rect startingRect;
-    startingRect.h = 50;
-    startingRect.w = 50;
+    startingRect.h = SNAKEPART_SIZE;
+    startingRect.w = SNAKEPART_SIZE;
     startingRect.x = 200;
     startingRect.y = 0;
 
     SDL_TimerID my_timer_id = 0;
-  //  my_timer_id = SDL_AddTimer(TICKDELAY, tickCallBack, NULL); 
+    my_timer_id = SDL_AddTimer(TICKDELAY, tickCallBack, NULL); 
 
     while (running) {
         while(SDL_PollEvent(&e)) {
@@ -497,22 +498,21 @@ int main(int argc, char* argv[]) {
                         snakeMasterVec.push_back(Snake());
                     }
                 } else if (e.key.keysym.sym == SDLK_LEFT) {
-                    snakeMasterVec.back().vel.x = -50;
+                    snakeMasterVec.back().vel.x = -SNAKEPART_SIZE;
                     snakeMasterVec.back().vel.y =  0;
                     snakeMasterVec.back().direction = WEST;
                 } else if (e.key.keysym.sym == SDLK_DOWN) {
                     snakeMasterVec.back().vel.x = 0;
-                    snakeMasterVec.back().vel.y = 50;
+                    snakeMasterVec.back().vel.y = SNAKEPART_SIZE;
                     snakeMasterVec.back().direction = SOUTH;
                 } else if (e.key.keysym.sym == SDLK_RIGHT) {
-                    snakeMasterVec.back().vel.x = 50;
+                    snakeMasterVec.back().vel.x = SNAKEPART_SIZE;
                     snakeMasterVec.back().vel.y = 0;
                     snakeMasterVec.back().direction = EAST;
                 } else if (e.key.keysym.sym == SDLK_SPACE) {
                     tickCallBack(1000, NULL);
                 }
             } else if (e.type = SDL_USEREVENT) {
-                //snakeMasterVec.shrink_to_fit();
                 if (e.user.code == GAME_TICK) {
                     for (auto it = snakeMasterVec.begin(); it != snakeMasterVec.end(); ++it) {
                         if (!it->collisionSnakeCheck()) {
@@ -528,17 +528,10 @@ int main(int argc, char* argv[]) {
                     }
                 }
             }
-            SDL_SetRenderDrawColor(renderer, 0,0,0,0);
             SDL_RenderClear(renderer);
             for (auto it = snakeMasterVec.begin(); it != snakeMasterVec.end(); ++it){
                 it->render();
             }
-            SDL_SetRenderDrawColor(renderer, 255,0,0,0);
-            for (int i = 0; i < windowHeight / 50; ++i){
-                SDL_RenderDrawLine(renderer, 0,i*50,windowWidth,i*50);
-            }
-            
-
             SDL_RenderPresent(renderer);
         }
     }
