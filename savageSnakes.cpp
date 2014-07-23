@@ -118,7 +118,6 @@ SnakePart::SnakePart() {
     isTail = false;
 }
 
-
 // figures out which SnakePart::texture to render based on SnakePart::corner and SnakePart::direction
 void SnakePart::render() {
     SDL_Texture * tex = nullptr;
@@ -375,20 +374,20 @@ bool collisionCheck(SDL_Rect* rectCheck) {
 bool collisionCheck(SDL_Rect* rectCheck, Snake snake, bool * didSnakeDie) {
     for (auto snakeIt = snakeMasterVec.begin(); snakeIt != snakeMasterVec.end(); ++snakeIt) {
         for (auto snakePartIt = snakeIt->snakeVecMember.begin(); snakePartIt != snakeIt->snakeVecMember.end(); ++snakePartIt) {
-            if (snakeIt->id != snake.id) {
-                if (SDL_HasIntersection(rectCheck, &snakePartIt->sRect)) {
-                    if (snakePartIt->color == snake.color) {
-                        snakeIt->dieNextTick = true;
-                        *didSnakeDie = true;
-                    }
+            if (SDL_HasIntersection(rectCheck, &snakePartIt->sRect)) {
+                if (snakeIt->id == snake.id) {
                     return true;
                 }
+                if (snakePartIt->color == snake.color) {
+                    snakeIt->dieNextTick = true;
+                    *didSnakeDie = true;
+                }
+                return true;
             }
         }
     } 
     return false;
 }
-
 
 // Calls either of the collisionCheck() functions and if there is a collision it will check around the head of the snake
 //to see if there are any open spaces and if there are the snake will change directions to keep moving until
